@@ -13,6 +13,8 @@ def make_dense_model(input_shape = (20,161), layers = [128,64]) :
         Input(shape=input_shape),
         Flatten()
     ])
+    if len(input_shape) == 3 :
+        model.add(Flatten())
     for layer in layers :
         model.add(Dense(layer, activation="ReLU"))
         model.add(Dropout(0.2))

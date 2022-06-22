@@ -1,3 +1,4 @@
+from numpy import dtype
 from champs import champ_to_one_hot
 import pandas as pd
 from tqdm import tqdm
@@ -36,8 +37,8 @@ def parse_url_match(url) :
     for i in range(len(Y_training)) :
         shuffle(df["Picks"][i+1])
         shuffle(df["Picks.1"][i+1])
-        shuffle(df["bans"][i+1])
-        shuffle(df["bans.1"][i+1])
+        shuffle(df["Bans"][i+1])
+        shuffle(df["Bans.1"][i+1])
         X_vector = [df["Picks"][i+1],df["Picks.1"][i+1]]
         X_training.append(X_vector)
     return df
