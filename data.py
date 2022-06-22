@@ -4,6 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from random import shuffle
 import tensorflow as tf
+from champs import NB_CHAMP
 
 
 def parse_url_match(url) :
@@ -93,5 +94,5 @@ def format(dataframe) :
         x = x.replace("[","")
         x = x.replace("]","")
         x = x.split(",")
-        x = [[boolean=="True" for boolean in x[i*champs.NB_CHAMP:(i+1)*champs.NB_CHAMP]] for i in range(5)]
+        x = [[boolean=="True" for boolean in x[i*NB_CHAMP:(i+1)*NB_CHAMP]] for i in range(5)]
         dataframe[column].values[i] = x
