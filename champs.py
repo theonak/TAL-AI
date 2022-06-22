@@ -168,8 +168,8 @@ NAME_ID_TABLE = {'None': 0, 'Annie': 1, 'Olaf': 2, 'Galio': 3, 'Twisted Fate': 4
 
 def champ_to_one_hot(champ) :
     length = len(NAME_ID_TABLE)
-    out = [False for _ in range(length)]
-    out[NAME_ID_TABLE[champ]] = True
+    out = [0 for _ in range(length)]
+    out[NAME_ID_TABLE[champ]] = 1
     return out
 
 def vec_to_champ(vec):

@@ -11,42 +11,28 @@ def parse_url_match(url) :
     df = pd.concat([df["P"],df["Blue"],df["Red"],df["Winner"],df["Bans"],df["Bans.1"],df["Picks"],df["Picks.1"]],axis=1)
     df = df.drop(0)
     df["Blue wins"] = (df["Blue"]==df["Winner"])
-    df = pd.concat([df["P"],df["Blue wins"],df["Bans"],df["Bans.1"],df["Picks"],df["Picks.1"]],axis=1)
+    out = pd.concat([df["Bans"],df["Bans.1"],df["Picks"],df["Picks.1"]],axis=1)
+    out["Blue wins"] = df["Blue wins"]
+    
+    
+    
+    out["Bans"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Bans"]]
+    out["Bans.1"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Bans.1"]]
+    out["Picks.1"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Picks.1"]]
+    out["Picks"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Picks"]]
+    
+    
+    for i in range(len(out["Picks"])) :
+        shuffle(out["Picks"][i+1])
+        shuffle(out["Picks.1"][i+1])
+        shuffle(out["Bans"][i+1])
+        shuffle(out["Bans.1"][i+1])
 
-    bans_list = []
-    for element in df["Bans"] :
-        bans_list.append([champ_to_one_hot(champ) for champ in element.split(",")])
-    df["Bans"] = bans_list
-
-    bans1_list = []
-    for element in df["Bans.1"] :
-        bans1_list.append([champ_to_one_hot(champ) for champ in element.split(",")])
-    df["Bans.1"] = bans1_list
-
-    Picks_list = []
-    for element in df["Picks"] :
-        Picks_list.append([champ_to_one_hot(champ) for champ in element.split(",")])
-    df["Picks"] = Picks_list
-
-    Picks1_list = []
-    for element in df["Picks.1"] :
-        Picks1_list.append([champ_to_one_hot(champ) for champ in element.split(",")])
-    df["Picks.1"] = Picks1_list
-    X_training = []
-    Y_training = pd.DataFrame(df["Blue wins"]).values
-    for i in range(len(Y_training)) :
-        shuffle(df["Picks"][i+1])
-        shuffle(df["Picks.1"][i+1])
-        shuffle(df["Bans"][i+1])
-        shuffle(df["Bans.1"][i+1])
-        X_vector = [df["Picks"][i+1],df["Picks.1"][i+1]]
-        X_training.append(X_vector)
-    return df
+    return out
 
 def parse_url_team(url) :
     df = parse_url_match(url)
     df = pd.concat([df["Picks"],df["Picks.1"]],axis=1)
-
     return df
 
 
@@ -99,3 +85,13 @@ def load(name) :
         name : "champ_df", "eval_champ_df", "team_df", "eval_team_df"  
     """
     return pd.read_csv("datasets/"+name)
+  
+def format(dataframe) :
+    for column in ["Picks","Picks.1","Bans","Bans.1"] :
+      for i in range(len(dataframe[column])) :
+        x = dataframe[column].values[i]
+        x = x.replace("[","")
+        x = x.replace("]","")
+        x = x.split(",")
+        x = [[boolean=="True" for boolean in x[i*champs.NB_CHAMP:(i+1)*champs.NB_CHAMP]] for i in range(5)]
+        dataframe[column].values[i] = x
