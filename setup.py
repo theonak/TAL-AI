@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-setup(name='TAL-AI',
+setup(name='talai',
       version='0.1',
       description='Team Analysis for League of Legends - AI',
       author='AlexAuragan, Theonakk',
