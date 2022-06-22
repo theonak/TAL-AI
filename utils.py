@@ -2,6 +2,7 @@ from random import shuffle
 from tensorflow import convert_to_tensor
 from champs import champ_to_one_hot, vec_to_champ
 
+
 def text_to_champ(champs):
     L = champs.split(",")
     return L
@@ -106,3 +107,6 @@ def analyse_game(game):
         print("En effet, c'est " + Winner + " qui a gagné")
     else:
         print("Non, la draft était pourtant évidente, c'est " + Winner + " qui a gagné")
+
+def to_tensor(df) :
+    return convert_to_tensor(list(df))
