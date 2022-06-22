@@ -81,7 +81,6 @@ class VAE(tf.keras.Model):
         ]
 
     def train_step(self, data):
-        print(data)
         ((team, champ),) = data
         with tf.GradientTape() as tape:
             z_mean, z_log_var, z = self.encoder(team)

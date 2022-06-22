@@ -2,6 +2,8 @@ from champs import champ_to_one_hot
 import pandas as pd
 from tqdm import tqdm
 from random import shuffle
+import tensorflow as tf
+
 
 def parse_url_match(url) :
     df = pd.read_html(url, header=1)[0]
@@ -32,35 +34,21 @@ def parse_url_match(url) :
     X_training = []
     Y_training = pd.DataFrame(df["Blue wins"]).values
     for i in range(len(Y_training)) :
-        X_vector = []
-        X_vector.extend(df["Bans"][i+1])
-        X_vector.extend(df["Bans.1"][i+1])
-        X_vector.extend(df["Picks"][i+1])
-        X_vector.extend(df["Picks.1"][i+1])
+        shuffle(df["Picks"][i+1])
+        shuffle(df["Picks.1"][i+1])
+        shuffle(df["bans"][i+1])
+        shuffle(df["bans.1"][i+1])
+        X_vector = [df["Picks"][i+1],df["Picks.1"][i+1]]
         X_training.append(X_vector)
-    return X_training, Y_training
+    return df
 
 def parse_url_team(url) :
-    df = pd.read_html(url, header=1)[0]
-    df = df.drop(0)
+    df = parse_url_match(url)
     df = pd.concat([df["Picks"],df["Picks.1"]],axis=1)
 
+    return df
 
-    Picks_list = []
-    for element in df["Picks"] :
-        Picks_list.append([champ_to_one_hot(champ) for champ in element.split(",")])
-    df["Picks"] = Picks_list
 
-    Picks1_list = []
-    for element in df["Picks.1"] :
-        Picks1_list.append([champ_to_one_hot(champ) for champ in element.split(",")])
-    df["Picks.1"] = Picks1_list
-    X_training = []
-    n = len(df["Picks"])
-    for i in range(n) :
-        X_training.append(df["Picks"][i+1])
-        X_training.append(df["Picks.1"][i+1])
-    return X_training
 
 start_url = "https://lol.fandom.com/wiki/Special:RunQuery/MatchHistoryGame?pfRunQueryFormName=MatchHistoryGame&MHG%5Bpreload%5D=Tournament&MHG%5Btournament%5D=&MHG%5Bteam%5D=&MHG%5Bteam1%5D=&MHG%5Bteam2%5D=&MHG%5Bban%5D=&MHG%5Brecord%5D=&MHG%5Bascending%5D%5Bis_checkbox%5D=true&MHG%5Blimit%5D=200&MHG%5Boffset%5D=&MHG%5Bregion%5D=&MHG%5Byear%5D=&MHG%5Bstartdate%5D="
 mid_url = "&MHG%5Benddate%5D="
@@ -99,9 +87,9 @@ def shuffle_team(data, nb_shuffle=10) :
         for x in data :
             shuffle(x)
 
-def extract_one_champ(data) :
-    team = [x[:4] for x in data]
-    champ = [x[4] for x in data]
+def extract_one_champ(dataframe) :
+    team = tf.convert_to_tensor([x[:4] for x in dataframe.values])
+    champ = tf.convert_to_tensor([x[4] for x in dataframe.values])
     return team, champ
 
 def load(name) :
