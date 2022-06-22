@@ -9,6 +9,5 @@ setup(name='talai',
       author='AlexAuragan, Theonakk',
       author_email='alexauragan@gmail.com',
       url='https://github.com/AlexAuragan/TAL-AI/',
-      packages=['talai'],
       py_modules=py_modules 
      )
