@@ -85,5 +85,5 @@ def format(dataframe) :
         x = x.replace("[","")
         x = x.replace("]","")
         x = x.split(",")
-        x = [[boolean=="True" for boolean in x[i*NB_CHAMP:(i+1)*NB_CHAMP]] for i in range(5)]
+        x = [[boolean==' 1' for boolean in x[i*NB_CHAMP:(i+1)*NB_CHAMP]] for i in range(5)]
         dataframe[column].values[i] = x
