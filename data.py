@@ -15,20 +15,11 @@ def parse_url_match(url) :
     out = pd.concat([df["Bans"],df["Bans.1"],df["Picks"],df["Picks.1"]],axis=1)
     out["Blue wins"] = df["Blue wins"]
     
-    
-    
     out["Bans"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Bans"]]
     out["Bans.1"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Bans.1"]]
     out["Picks.1"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Picks.1"]]
     out["Picks"] = [[champ_to_one_hot(champ) for champ in element.split(",")] for element in df["Picks"]]
     
-    
-    for i in range(len(out["Picks"])) :
-        shuffle(out["Picks"][i+1])
-        shuffle(out["Picks.1"][i+1])
-        shuffle(out["Bans"][i+1])
-        shuffle(out["Bans.1"][i+1])
-
     return out
 
 def parse_url_team(url) :
@@ -70,10 +61,10 @@ def generate_urls(start_year, start_month, start_day):
   return urls
 
 
-def shuffle_team(data, nb_shuffle=10) : 
-    for _ in tqdm(range(nb_shuffle)) :
-        for x in data :
-            shuffle(x)
+def shuffle_df(data) :
+    for key in data.keys() :
+      for x in data[key] :
+          shuffle(x)
 
 def extract_one_champ(dataframe) :
     team = tf.convert_to_tensor([x[:4] for x in dataframe.values])
