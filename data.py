@@ -65,7 +65,7 @@ def shuffle_df(data) :
   for key in data.keys() :
     for x in data[key] :
       shuffle(x)
-    shuffle(data[key])
+
 
 def extract_one_champ(dataframe) :
     team = tf.convert_to_tensor([x[:4] for x in dataframe.values])
