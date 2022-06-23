@@ -3,10 +3,12 @@ from data import generate_urls, parse_url_match
 from tqdm import tqdm
 import pandas as pd
 import csv
-urls = generate_urls(2022, 1, 1)
+urls = generate_urls(2021, 11, 1)
 
-match_eval_df = parse_url_match(urls[0])
-match_train_df = pd.concat([parse_url_match(urls[i]) for i in range(1,len(urls))])
+match_eval_df = pd.concat([parse_url_match(urls[i]) for i in range(30)])
+match_train_df = pd.concat([parse_url_match(urls[i]) for i in range(30,len(urls))])
 
 match_eval_df.to_csv("match_eval_df.csv")
 match_train_df.to_csv("match_train_df.csv")
+
+print(match_eval_df)
