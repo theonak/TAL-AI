@@ -17,9 +17,6 @@ def make_dense_model(input_shape = (20,161), layers = [128,64]) :
         model.add(Dense(layer, activation="ReLU"))
         model.add(Dropout(0.2))
     model.add(Dense(1, activation=tf.keras.activations.sigmoid))
-    model.compile(optimizer='adam', 
-                loss= tf.keras.losses.BinaryCrossentropy(),
-                metrics= ["Accuracy"])
     return model
 
 
