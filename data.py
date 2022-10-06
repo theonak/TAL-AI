@@ -54,7 +54,7 @@ def generate_urls(start_year, start_month, start_day):
   day = start_day
   month = start_month
   year = start_year
-  while year != 2022 or month != 6 or day != 21 :
+  while year != 2022 or month != 10 or day != 6 :
     y, m, d = next_date(year, month, day)
     urls.append(start_url + date_str(year, month, day) + mid_url + date_str(y, m, d) + end_url)
     year, month, day = y, m, d
